@@ -2,10 +2,10 @@ import React, { useContext } from 'react';
 import APIContext from '../providers/APIcontext';
 
 function PlanetsTable() {
-  const { data, categories } = useContext(APIContext);
+  const { filteredPlanets, categories } = useContext(APIContext);
 
   const filteredCategories = categories.filter((cat) => cat !== 'residents');
-  console.log('data', data, 'cat', filteredCategories);
+  // console.log('data', filteredPlanets, 'cat', filteredCategories);
 
   return (
     <div>
@@ -21,7 +21,7 @@ function PlanetsTable() {
       </table>
       <tbody>
         {
-          data.map((planet, index) => (
+          filteredPlanets.map((planet, index) => (
             <tr key={ index }>
               <td>{ planet.name }</td>
               <td>{ planet.rotation_period }</td>

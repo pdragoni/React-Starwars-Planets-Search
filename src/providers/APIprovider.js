@@ -5,6 +5,8 @@ import APIContext from './APIcontext';
 function APIProvider({ children }) {
   const [data, setData] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [query, setQuery] = useState(''); // console.log(query);
+  const [filteredPlanets, setFilteredPlanets] = useState([]);
 
   useEffect(() => {
     const fetchPlanets = async () => {
@@ -13,17 +15,31 @@ function APIProvider({ children }) {
         const responseJson = await response.json();
         // console.log(responseJson.results);
         setData(responseJson.results);
+        setFilteredPlanets(responseJson.results);
         setCategories(Object.keys(responseJson.results[2]));
       } catch {
-        console.log(error);
+        // console.log(error);
       }
     };
     fetchPlanets();
     // console.log(data);
   }, []);
 
+  const handleValue = ({ target }) => {
+    setQuery(target.value.toLowerCase());
+  };
+
+  useEffect(() => {
+    const filterByQuery = data.filter((planet) => planet
+      .name.toLowerCase()
+      .includes(query));
+    setFilteredPlanets(filterByQuery);
+  }, [query]);
+
   return (
-    <APIContext.Provider value={ { data, categories } }>
+    <APIContext.Provider
+      value={ { categories, query, handleValue, filteredPlanets } }
+    >
       { children }
     </APIContext.Provider>
   );
