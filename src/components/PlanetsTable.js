@@ -4,7 +4,7 @@ import APIContext from '../providers/APIcontext';
 function PlanetsTable() {
   const { filteredPlanets, categories } = useContext(APIContext);
 
-  const filteredCategories = categories.filter((cat) => cat !== 'residents');
+  const filteredCategories = categories.filter((cat) => cat !== 'residents'); // Altera os elementos a serem mostrados na página
   // console.log('data', filteredPlanets, 'cat', filteredCategories);
 
   return (
