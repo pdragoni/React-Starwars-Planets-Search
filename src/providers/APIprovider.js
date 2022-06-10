@@ -8,11 +8,11 @@ function APIProvider({ children }) {
   const [categories, setCategories] = useState([]); // categorias/caracteríticas dos planetas
   const [query, setQuery] = useState(''); // console.log(query); -> busca digitada pelo usuário
 
-  // Lida com o filtro numérico //
-  // const [numericFilters, setNumericFilters] = useState([]); // array de filtros numéricos
-  // const [operator, setOperator] = useState('igual');
-  // const [parameter, setParameter] = useState('population');
-  // const [valueFilter, setValueFilter] = useState(0);
+  // // Lida com o filtro numérico //
+  const [numericFilters, setNumericFilters] = useState([]); // array de filtros numéricos
+  const [operator, setOperator] = useState('maior que');
+  const [column, setColumn] = useState('population');
+  const [queryNumber, setQueryNumber] = useState(0);
 
   useEffect(() => {
     const fetchPlanets = async () => {
@@ -35,21 +35,50 @@ function APIProvider({ children }) {
     setQuery(target.value.toLowerCase());
   };
 
+  const handleNumericFilter = () => {
+    const numericFilter = {
+      column,
+      operator,
+      queryNumber,
+    };
+    // console.log(numericFilter);
+    setNumericFilters([...numericFilters, numericFilter]);
+  };
+
   useEffect(() => { // Acontecerá sempre que query for modificado.
     const filterByQuery = data.filter((planet) => planet // filtra pelo mecanismo de busca escrito pelo usuário
       .name.toLowerCase() // o nome do planeta em minúsculas
       .includes(query)); //  inclui o que o usuŕio digitou?
-    setFilteredPlanets(filterByQuery); //  o array retornado
-  }, [query]);
+    // console.log(filterByQuery);
+
+    const resultArray = numericFilters.reduce((acc, filter) => acc.filter((planet) => {
+      switch (filter.operator) {
+      case 'igual a':
+        return planet[filter.column] === Number(filter.queryNumber);
+      case 'maior que':
+        return planet[filter.column] > Number(filter.queryNumber);
+      case 'menor que':
+        return planet[filter.column] < Number(filter.queryNumber);
+      default:
+        return true;
+      }
+    }), filteredPlanets);
+
+    setFilteredPlanets(resultArray);
+    // setFilteredPlanets(filterByQuery); //  o array retornado
+  }, [query, numericFilters]);
 
   const ProvidedInfo = { // Objeto com as informaões a serem enviadas para os outros componentes;
+    filteredPlanets,
     categories,
     query,
+    queryNumber,
+    numericFilters,
     handleValue,
-    filteredPlanets,
-    operator,
-    parameter,
-    valueFilter,
+    handleNumericFilter,
+    setColumn,
+    setOperator,
+    setQueryNumber,
   };
 
   return (

@@ -2,11 +2,9 @@ import React, { useContext } from 'react';
 import APIContext from '../providers/APIcontext';
 
 function Header() {
-  const { query, handleValue } = useContext(APIContext);
-
-  const handleNumericFilter = () => {
-    console.log(operator, 'operator');
-  };
+  const { query, queryNumber, handleValue, handleNumericFilter,
+    setOperator, setQueryNumber, setColumn,
+    numericFilters } = useContext(APIContext);
 
   return (
     <div>
@@ -23,31 +21,41 @@ function Header() {
             data-testid="name-filter"
           />
         </label>
-        <label htmlFor="parameter">
-          Select a parameter
-          <select id="parameter" data-testid="column-filter">
-            <option value="population">Population</option>
-            <option value="orbital_period">Orbital_period</option>
-            <option value="diameter">Diameter</option>
+        <label htmlFor="column">
+          Select a column
+          <select
+            onChange={ ({ target }) => setColumn(target.value) }
+            id="column"
+            data-testid="column-filter"
+          >
+            <option value="population">population</option>
+            <option value="orbital_period">orbital_period</option>
+            <option value="diameter">diameter</option>
             <option value="rotation_period">rotation_period</option>
             <option value="surface_water">surface_water</option>
           </select>
         </label>
         <label htmlFor="operator">
           Select an operator
-          <select id="operator" data-testid="comparison-filter">
-            <option value="maior">Maior que</option>
-            <option value="menor">Menor que</option>
-            <option value="igual">Igual a</option>
+          <select
+            onChange={ ({ target }) => setOperator(target.value) }
+            id="operator"
+            data-testid="comparison-filter"
+          >
+            <option value="maior que">maior que</option>
+            <option value="igual a">igual a</option>
+            <option value="menor que">menor que</option>
           </select>
         </label>
         <label htmlFor="filter-by-number">
           Filter by number
           <input
+            onChange={ ({ target }) => setQueryNumber(target.value) }
             type="number"
+            value={ queryNumber }
             data-testid="value-filter"
             id="filter-by-number"
-            placeholder="0"
+            placeholder="20000"
           />
         </label>
         <button
@@ -58,6 +66,14 @@ function Header() {
           Filter
         </button>
       </form>
+      {numericFilters.map(
+        (filter, index) => (
+          <tr
+            key={ index }
+          >
+            {`${filter.column} ${filter.operator} ${filter.queryNumber}`}
+          </tr>),
+      )}
     </div>
   );
 }
