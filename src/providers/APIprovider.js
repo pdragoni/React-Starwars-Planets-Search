@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import APIContext from './APIcontext';
 
+const array = ['population', 'orbital_period',
+  'diameter', 'rotation_period', 'surface_water'];
 function APIProvider({ children }) {
   const [data, setData] = useState([]); // results, da API.
   const [filteredPlanets, setFilteredPlanets] = useState([]); // Cópia de: useState(data);
@@ -13,6 +15,8 @@ function APIProvider({ children }) {
   const [comparison, setComparison] = useState('maior que');
   const [column, setColumn] = useState('population');
   const [value, setValue] = useState(0);
+
+  const [parameters, setParameters] = useState(array);
 
   useEffect(() => {
     const fetchPlanets = async () => {
@@ -41,7 +45,10 @@ function APIProvider({ children }) {
       comparison,
       value,
     };
-    console.log(numericFilters);
+    // console.log(numericFilters);
+
+    setParameters(parameters.filter((elemento) => elemento !== column));
+
     const result = filteredPlanets.filter((planet) => {
       if (comparison === 'maior que') {
         // console.log(planet.comparison);
@@ -78,11 +85,16 @@ function APIProvider({ children }) {
     setFilteredPlanets(filterByQuery); //  o array retornado
   }, [data, query]);
 
+  const updateParameters = () => {
+    array.filter((elemento) => elemento !== numericFilters[index].column)
+  }
+
   const ProvidedInfo = { // Objeto com as informaões a serem enviadas para os outros componentes;
     filteredPlanets,
     categories,
     query,
     value,
+    parameters,
     numericFilters,
     handleValue,
     handleNumericFilter,

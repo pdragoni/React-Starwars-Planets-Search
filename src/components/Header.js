@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import APIContext from '../providers/APIcontext';
 
 function Header() {
-  const { query, value, handleValue, handleNumericFilter,
+  const { query, value, parameters, handleValue, handleNumericFilter,
     setComparison, setValue, setColumn,
     numericFilters } = useContext(APIContext);
 
@@ -28,11 +28,11 @@ function Header() {
             id="column"
             data-testid="column-filter"
           >
-            <option value="population">population</option>
-            <option value="orbital_period">orbital_period</option>
-            <option value="diameter">diameter</option>
-            <option value="rotation_period">rotation_period</option>
-            <option value="surface_water">surface_water</option>
+            {
+              parameters.map((param, index) => (
+                <option key={ index } value={ param }>{ param }</option>
+              ))
+            }
           </select>
         </label>
         <label htmlFor="operator">
@@ -68,11 +68,11 @@ function Header() {
       </form>
       {numericFilters.map(
         (filter, index) => (
-          <span
+          <p
             key={ index }
           >
             {`${filter.column} ${filter.comparison} ${filter.value}`}
-          </span>),
+          </p>),
       )}
     </div>
   );
