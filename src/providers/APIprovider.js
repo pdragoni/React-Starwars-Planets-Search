@@ -85,10 +85,6 @@ function APIProvider({ children }) {
     setFilteredPlanets(filterByQuery); //  o array retornado
   }, [data, query]);
 
-  const updateParameters = () => {
-    array.filter((elemento) => elemento !== numericFilters[index].column)
-  }
-
   const ProvidedInfo = { // Objeto com as informaões a serem enviadas para os outros componentes;
     filteredPlanets,
     categories,
