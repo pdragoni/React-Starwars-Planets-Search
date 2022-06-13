@@ -3,7 +3,7 @@ import APIContext from '../providers/APIcontext';
 
 function Header() {
   const { query, value, parameters, handleValue, handleNumericFilter,
-    setComparison, setValue, setColumn,
+    setComparison, setValue, setColumn, removeFilter, removeAll,
     numericFilters } = useContext(APIContext);
 
   return (
@@ -69,11 +69,22 @@ function Header() {
       {numericFilters.map(
         (filter, index) => (
           <p
+            data-testid="filter"
             key={ index }
           >
             {`${filter.column} ${filter.comparison} ${filter.value}`}
-          </p>),
+            <br />
+            <button type="button" onClick={ () => removeFilter(filter) }>Remover</button>
+          </p>
+        ),
       )}
+      <button
+        type="button"
+        data-testid="button-remove-filters"
+        onClick={ removeAll }
+      >
+        remove tudo
+      </button>
     </div>
   );
 }
