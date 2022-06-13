@@ -10,9 +10,9 @@ function APIProvider({ children }) {
 
   // // Lida com o filtro numérico //
   const [numericFilters, setNumericFilters] = useState([]); // array de filtros numéricos
-  const [operator, setOperator] = useState('maior que');
+  const [comparison, setComparison] = useState('maior que');
   const [column, setColumn] = useState('population');
-  const [queryNumber, setQueryNumber] = useState(0);
+  const [value, setValue] = useState(0);
 
   useEffect(() => {
     const fetchPlanets = async () => {
@@ -38,11 +38,22 @@ function APIProvider({ children }) {
   const handleNumericFilter = () => {
     const numericFilter = {
       column,
-      operator,
-      queryNumber,
+      comparison,
+      value,
     };
-    // console.log(numericFilter);
     setNumericFilters([...numericFilters, numericFilter]);
+    console.log(numericFilters);
+    const result = filteredPlanets.filter((planet) => {
+      if (comparison === 'maior que') {
+        // console.log(planet.comparison);
+        return Number(planet[column]) > Number(value);
+      }
+      if (comparison === 'menor que') {
+        return Number(planet[column]) < Number(value);
+      }
+      return Number(planet[column]) < Number(value);
+    });
+    setFilteredPlanets(result);
   };
 
   useEffect(() => { // Acontecerá sempre que query for modificado.
@@ -51,34 +62,33 @@ function APIProvider({ children }) {
       .includes(query)); //  inclui o que o usuŕio digitou?
     // console.log(filterByQuery);
 
-    const resultArray = numericFilters.reduce((acc, filter) => acc.filter((planet) => {
-      switch (filter.operator) {
-      case 'igual a':
-        return planet[filter.column] === Number(filter.queryNumber);
-      case 'maior que':
-        return planet[filter.column] > Number(filter.queryNumber);
-      case 'menor que':
-        return planet[filter.column] < Number(filter.queryNumber);
-      default:
-        return true;
-      }
-    }), filteredPlanets);
+    // const resultArray = numericFilters.reduce((acc, filter) => acc.filter((planet) => {
+    //   switch (filter.comparison) {
+    //   case 'igual a':
+    //     return Number(planet[filter.column]) === Number(filter.value);
+    //   case 'maior que':
+    //     return Number(planet[filter.column]) > Number(filter.value);
+    //   case 'menor que':
+    //     return Number(planet[filter.column]) < Number(filter.value);
+    //   default:
+    //     return true;
+    //   }
+    // }), filteredPlanets);
 
-    setFilteredPlanets(resultArray);
-    // setFilteredPlanets(filterByQuery); //  o array retornado
-  }, [query, numericFilters]);
+    setFilteredPlanets(filterByQuery); //  o array retornado
+  }, [data, query]);
 
   const ProvidedInfo = { // Objeto com as informaões a serem enviadas para os outros componentes;
     filteredPlanets,
     categories,
     query,
-    queryNumber,
+    value,
     numericFilters,
     handleValue,
     handleNumericFilter,
     setColumn,
-    setOperator,
-    setQueryNumber,
+    setComparison,
+    setValue,
   };
 
   return (

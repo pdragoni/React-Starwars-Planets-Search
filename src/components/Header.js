@@ -2,8 +2,8 @@ import React, { useContext } from 'react';
 import APIContext from '../providers/APIcontext';
 
 function Header() {
-  const { query, queryNumber, handleValue, handleNumericFilter,
-    setOperator, setQueryNumber, setColumn,
+  const { query, value, handleValue, handleNumericFilter,
+    setComparison, setValue, setColumn,
     numericFilters } = useContext(APIContext);
 
   return (
@@ -38,7 +38,7 @@ function Header() {
         <label htmlFor="operator">
           Select an operator
           <select
-            onChange={ ({ target }) => setOperator(target.value) }
+            onChange={ ({ target }) => setComparison(target.value) }
             id="operator"
             data-testid="comparison-filter"
           >
@@ -50,9 +50,9 @@ function Header() {
         <label htmlFor="filter-by-number">
           Filter by number
           <input
-            onChange={ ({ target }) => setQueryNumber(target.value) }
+            onChange={ ({ target }) => setValue(target.value) }
             type="number"
-            value={ queryNumber }
+            value={ value }
             data-testid="value-filter"
             id="filter-by-number"
             placeholder="20000"
@@ -66,14 +66,14 @@ function Header() {
           Filter
         </button>
       </form>
-      {numericFilters.map(
+      {/* {numericFilters.map(
         (filter, index) => (
           <tr
             key={ index }
           >
-            {`${filter.column} ${filter.operator} ${filter.queryNumber}`}
+            {`${filter.column} ${filter.comparison} ${filter.value}`}
           </tr>),
-      )}
+      )} */}
     </div>
   );
 }
