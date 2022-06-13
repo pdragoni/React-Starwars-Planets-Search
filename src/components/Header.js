@@ -66,14 +66,14 @@ function Header() {
           Filter
         </button>
       </form>
-      {/* {numericFilters.map(
+      {numericFilters.map(
         (filter, index) => (
-          <tr
+          <span
             key={ index }
           >
             {`${filter.column} ${filter.comparison} ${filter.value}`}
-          </tr>),
-      )} */}
+          </span>),
+      )}
     </div>
   );
 }

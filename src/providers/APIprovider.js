@@ -41,7 +41,6 @@ function APIProvider({ children }) {
       comparison,
       value,
     };
-    setNumericFilters([...numericFilters, numericFilter]);
     console.log(numericFilters);
     const result = filteredPlanets.filter((planet) => {
       if (comparison === 'maior que') {
@@ -51,9 +50,10 @@ function APIProvider({ children }) {
       if (comparison === 'menor que') {
         return Number(planet[column]) < Number(value);
       }
-      return Number(planet[column]) < Number(value);
+      return Number(planet[column]) === Number(value);
     });
     setFilteredPlanets(result);
+    setNumericFilters([...numericFilters, numericFilter]);
   };
 
   useEffect(() => { // Acontecerá sempre que query for modificado.
