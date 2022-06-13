@@ -51,7 +51,7 @@ function APIProvider({ children }) {
       if (comparison === 'menor que') {
         return Number(planet[column]) < Number(value);
       }
-      return Number(planet[column]) === Number(value);
+      return Number(planet[column]) < Number(value);
     });
     setFilteredPlanets(result);
   };
